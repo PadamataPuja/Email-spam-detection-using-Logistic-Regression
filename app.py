@@ -1,34 +1,29 @@
-# -*- coding: utf-8 -*-
-
-
 import streamlit as st
 import joblib
 import numpy as np
+import os
 
-# Load the trained model and vectorizer
-model = joblib.load("model.pkl")
-vectorizer = joblib.load("vectorizer.pkl")
-
-# Streamlit app
 st.title("Spam Detection App")
 st.write("Enter a message to check if it is spam or not.")
 
-# User input
-user_input = st.text_area("Enter your message:")
+# Check if model and vectorizer exist
+if os.path.exists("model.pkl") and os.path.exists("vectorizer.pkl"):
+    model = joblib.load("model.pkl")
+    vectorizer = joblib.load("vectorizer.pkl")
 
-if st.button("Predict"):
-    if user_input.strip() == "":
-        st.warning("Please enter a message.")
-    else:
-        # Transform input text using the vectorizer
-        input_vector = vectorizer.transform([user_input])
+    # User input
+    user_input = st.text_area("Enter your message:")
 
-        # Predict using the model
-        prediction = model.predict(input_vector)
-
-        # Display the result
-        if prediction[0] == 1:
-            st.error("This message is SPAM!")
+    if st.button("Predict"):
+        if user_input.strip() == "":
+            st.warning("Please enter a message.")
         else:
-            st.success("This message is NOT SPAM.")
+            input_vector = vectorizer.transform([user_input])
+            prediction = model.predict(input_vector)
 
+            if prediction[0] == 1:
+                st.error("This message is SPAM!")
+            else:
+                st.success("This message is NOT SPAM.")
+else:
+    st.error("Required model files not found. Please upload 'model.pkl' and 'vectorizer.pkl'.")
