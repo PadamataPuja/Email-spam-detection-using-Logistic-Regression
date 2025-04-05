@@ -7,7 +7,7 @@ st.title("Spam Detection App")
 st.write("Enter a message to check if it is spam or not.")
 
 # Check if model and vectorizer exist
-if os.path.exists("model.pkl") and os.path.exists("vectorizer.pkl"):
+if os.path.exists("logistic_regression_model.pkl") and os.path.exists("TfidfVectorizer.pkl"):
     model = joblib.load("model.pkl")
     vectorizer = joblib.load("vectorizer.pkl")
 
